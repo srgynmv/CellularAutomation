@@ -11,13 +11,17 @@ class IHWorker : public QObject
 public:
     explicit IHWorker(QString imagePath, QString destPath, QObject *parent = 0);
 
-    void setParameters(int numberOfIterations, int threshold);
+    void setParameters(int numberOfIterations, int frameThreshold, int brightnessThreshold, int stressAmplitude, int stressCycles);
 private:
     ImageHandler *imageHandler;
     QString imagePath;
     QString destPath;
     int numberOfIterations;
-    int threshold;
+    int frameThreshold;
+    int brightnessThreshold;
+    int stressAmplitude;
+    int stressCycles;
+
 signals:
     void finished();
     void gotNewIteration(int current);

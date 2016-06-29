@@ -6,18 +6,21 @@ IHWorker::IHWorker(QString imagePath, QString destPath, QObject *parent) : QObje
     this->destPath = destPath;
 }
 
-void IHWorker::setParameters(int numberOfIterations, int threshold)
+void IHWorker::setParameters(int numberOfIterations, int frameThreshold, int brightnessThreshold, int stressAmplitude, int stressCycles)
 {
     this->numberOfIterations = numberOfIterations;
-    this->threshold = threshold;
+    this->frameThreshold = frameThreshold;
+    this->brightnessThreshold = brightnessThreshold;
+    this->stressAmplitude = stressAmplitude;
+    this->stressCycles = stressCycles;
 }
 
 void IHWorker::start()
 {
     //Init
     QImage *sourceImage = new QImage(imagePath);
-    imageHandler = new ImageHandler(sourceImage, threshold);
-
+    imageHandler = new ImageHandler(sourceImage, frameThreshold, brightnessThreshold, stressAmplitude, stressCycles);
+    sourceImage->save(destPath + "/" + QString::number(0) + ".bmp");
     //Work
     for (int i = 0; i < numberOfIterations; ++i)
     {

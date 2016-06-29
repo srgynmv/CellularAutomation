@@ -16,12 +16,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Initialize parameters
 
-    //Connect signals and slots
+    //Connect window signals and slots
     connect(ui->openImageBrowserButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(ui->openDestBrowserButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startInNewThread()));
 
-#ifdef QT_DEBUG
+#if true
+    qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
     ui->imagePathLine->setText("/home/srgynmv/ZTV/1_1.bmp");
     ui->destPathLine->setText("/home/srgynmv/Result");
 #endif
@@ -50,10 +51,12 @@ void MainWindow::startInNewThread()
     QThread *backgroundThread = new QThread();
 
     ihWorker->moveToThread(backgroundThread);
-    ihWorker->setParameters(ui->iterationNumberSpinBox->value(), ui->thresholdSpinBox->value());
+    ihWorker->setParameters(ui->iterationNumberSpinBox->value(), ui->frameThresholdSpinBox->value(), ui->brightThresholdSpinBox-> value(), ui->stressAmplitudeSpinBox->value(), ui->stressCyclesSpinBox->value());
 
     //Setup progress bar values
     ui->progressBar->setMaximum(ui->iterationNumberSpinBox->value());
+    ui->progressBar->reset();
+    ui->progressBar->update();
 
     //Disable start button then process just started
     connect(backgroundThread, SIGNAL(started()), this, SLOT(changeStartButtonState()));

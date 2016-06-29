@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>456</width>
-    <height>200</height>
+    <height>305</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,8 +27,35 @@
     </sizepolicy>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="4" column="0">
+     <layout class="QHBoxLayout" name="buttonLayout">
+      <item>
+       <widget class="QPushButton" name="startButton">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Start</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="value">
+         <number>24</number>
+        </property>
+        <property name="textVisible">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="2" column="0">
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="parametersLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="iterationsNumberLabel">
         <property name="text">
@@ -42,20 +69,68 @@
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>1000000000</number>
+         <number>2147483647</number>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="thresholdLabel">
+       <widget class="QLabel" name="frameThresholdLabel">
         <property name="text">
-         <string>Threshold:</string>
+         <string>Frame threshold:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QSpinBox" name="thresholdSpinBox">
+       <widget class="QSpinBox" name="frameThresholdSpinBox">
         <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="stressAmplitudeLabel">
+        <property name="text">
+         <string>Stress amplitude:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="stressCyclesLabel">
+        <property name="text">
+         <string>Stress cycles in 1 iteration:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QSpinBox" name="stressCyclesSpinBox">
+        <property name="maximum">
+         <number>2147483647</number>
+        </property>
+        <property name="value">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QSpinBox" name="stressAmplitudeSpinBox">
+        <property name="maximum">
+         <number>2147483647</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="brightThresholdLabel">
+        <property name="text">
+         <string>Brightness threshold:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="brightThresholdSpinBox">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+        <property name="value">
          <number>255</number>
         </property>
        </widget>
@@ -63,7 +138,7 @@
      </layout>
     </item>
     <item row="0" column="0">
-     <layout class="QGridLayout" name="PathLayout">
+     <layout class="QGridLayout" name="pathLayout">
       <item row="2" column="1">
        <widget class="QPushButton" name="openImageBrowserButton">
         <property name="enabled">
@@ -174,32 +249,19 @@
       </item>
      </layout>
     </item>
+    <item row="1" column="0">
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
     <item row="3" column="0">
-     <layout class="QHBoxLayout" name="buttonLayout">
-      <item>
-       <widget class="QPushButton" name="startButton">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>Start</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QProgressBar" name="progressBar">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="value">
-         <number>24</number>
-        </property>
-        <property name="textVisible">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
