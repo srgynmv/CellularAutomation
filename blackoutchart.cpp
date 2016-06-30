@@ -1,5 +1,6 @@
 #include "blackoutchart.h"
 #include "ui_blackoutchart.h"
+#include "imagehandler.h"
 #include "qcustomplot.h"
 
 BlackoutChart::BlackoutChart(QWidget *parent) :
@@ -14,7 +15,7 @@ BlackoutChart::~BlackoutChart()
     delete ui;
 }
 
-void BlackoutChart::createChart(QVector<double> relativeBlackout, int numberOfCycles)
+void BlackoutChart::createChart(std::vector<double> relativeBlackout, int numberOfCycles)
 {
     //Vector of coordinates
     QVector<double> X(numberOfCycles), Y(numberOfCycles);
@@ -40,4 +41,10 @@ void BlackoutChart::createChart(QVector<double> relativeBlackout, int numberOfCy
     ui->chart->yAxis->setRange(0, 1);
 
     ui->chart->replot();
+}
+
+void BlackoutChart::startShowChart(ImageHandler* imageHandler, int numberOfIterations, int stressCycles)
+{
+    createChart(imageHandler->getVectorOfRelativeBlackout(), numberOfIterations * stressCycles);
+    show();
 }

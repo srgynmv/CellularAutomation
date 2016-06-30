@@ -51,6 +51,7 @@ void MainWindow::startInNewThread()
 {
     //Initialize new thread and worker
     ihWorker = new IHWorker(ui->imagePathLine->text(), ui->destPathLine->text());
+    blChart = new BlackoutChart();
     QThread *backgroundThread = new QThread();
 
     ihWorker->moveToThread(backgroundThread);
@@ -69,6 +70,7 @@ void MainWindow::startInNewThread()
     //Connect with progress bar
     connect(ihWorker, SIGNAL(gotNewIteration(int)), ui->progressBar, SLOT(setValue(int)));
     //Delete all after finishing
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), blChart, SLOT(startShowChart(ImageHandler*, int, int)));
     connect(ihWorker, SIGNAL(finished()), backgroundThread, SLOT(quit()));
     connect(ihWorker, SIGNAL(finished()), ihWorker, SLOT(deleteLater()));
     connect(backgroundThread, SIGNAL(finished()), backgroundThread, SLOT(deleteLater()));

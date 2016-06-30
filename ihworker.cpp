@@ -38,12 +38,10 @@ void IHWorker::start()
         emit gotNewIteration(i + 1);
     }
 
-    emit finished();
-
     imageHandler->createVectorOfRelativeBlackout(numberOfIterations);
-    blChart = new BlackoutChart();
-    blChart->createChart(imageHandler->getVectorOfRelativeBlackout(), numberOfIterations * stressCycles);
-    blChart->show();
+
+    emit finished();
+    emit finished(imageHandler, numberOfIterations, stressCycles);
 
     delete sourceImage;
 }

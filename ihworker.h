@@ -16,7 +16,6 @@ public:
 
 private:
     ImageHandler *imageHandler;
-    BlackoutChart *blChart;
     QString imagePath;
     QString destPath;
     int numberOfIterations;
@@ -27,6 +26,7 @@ private:
 
 signals:
     void finished();
+    void finished(ImageHandler* imageHandler, int numberOfIterations, int stressCycles);
     void gotNewIteration(int current);
 
 public slots:

@@ -61,17 +61,17 @@ QImage *ImageHandler::getImage()
 
 void ImageHandler::initVectorsOfBlackout(int numberOfIterations)
 {
-    blackout = QVector<double>(numberOfIterations * stressCycles);
-    relativeBlackout = QVector<double>(numberOfIterations * stressCycles);
+    blackout = std::vector<double>(numberOfIterations * stressCycles);
+    relativeBlackout = std::vector<double>(numberOfIterations * stressCycles);
 }
 
 void ImageHandler::createVectorOfRelativeBlackout(int numberOfIterations)
 {
     for (int i = 0; i < numberOfIterations * stressCycles; i++)
-        relativeBlackout.append(blackout[i] / blackout[blackout.size() - 1]);
+        relativeBlackout.push_back(blackout[i] / blackout[blackout.size() - 1]);
 }
 
-QVector<double> ImageHandler::getVectorOfRelativeBlackout()
+std::vector<double> ImageHandler::getVectorOfRelativeBlackout()
 {
     return relativeBlackout;
 }
@@ -136,7 +136,7 @@ void ImageHandler::useAlgorithmFor(QVector<QVector<int>> &newDataMatrix, QVector
             newActiveMatrix[y][x] = frame[y][x] || newDataMatrix[y][x] < brightnessThreshold;
 
             //Calculation of blackout value
-            blackout.append((1 / (sourceImage->width() * sourceImage->height())) * (dataMatrix[y][x] - newDataMatrix[y][x]));
+            blackout.push_back((1 / (sourceImage->width() * sourceImage->height())) * (dataMatrix[y][x] - newDataMatrix[y][x]));
         }
     }
 }

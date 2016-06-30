@@ -23,13 +23,13 @@ public:
 
     void initVectorsOfBlackout(int numberOfIterations);
     void createVectorOfRelativeBlackout(int numberOfIterations);
-    QVector<double> getVectorOfRelativeBlackout();
+    std::vector<double> getVectorOfRelativeBlackout();
 
 private:
     QImage *sourceImage;
     QVector<QVector<int>> dataMatrix;
     QVector<QVector<char>> frame, activeMatrix;
-    QVector<double> blackout, relativeBlackout;
+    std::vector<double> blackout, relativeBlackout;
     int frameThreshold;
     int brightnessThreshold;
     int stressAmplitude;
