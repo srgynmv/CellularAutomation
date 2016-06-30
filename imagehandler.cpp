@@ -7,6 +7,10 @@ ImageHandler::ImageHandler(QImage *image, int frameThreshold, int brightnessThre
     this->brightnessThreshold = brightnessThreshold;
     this->stressAmplitude = stressAmplitude;
     this->stressCycles = stressCycles;
+
+    blackout = std::vector<double>();
+    relativeBlackout = std::vector<double>();
+
     setImage(image);
 }
 
@@ -59,16 +63,15 @@ QImage *ImageHandler::getImage()
     return image;
 }
 
-void ImageHandler::initVectorsOfBlackout(int numberOfIterations)
-{
-    blackout = std::vector<double>(numberOfIterations * stressCycles);
-    relativeBlackout = std::vector<double>(numberOfIterations * stressCycles);
-}
-
 void ImageHandler::createVectorOfRelativeBlackout(int numberOfIterations)
 {
+    double maxBlackout = 0;
     for (int i = 0; i < numberOfIterations * stressCycles; i++)
-        relativeBlackout.push_back(blackout[i] / blackout[blackout.size() - 1]);
+    {
+        maxBlackout = qMax(maxBlackout, blackout[i]);
+    }
+    for (int i = 0; i < numberOfIterations * stressCycles; i++)
+        relativeBlackout.push_back(blackout[i] / maxBlackout/*blackout[blackout.size() - 1]*/);
 }
 
 std::vector<double> ImageHandler::getVectorOfRelativeBlackout()
@@ -96,6 +99,7 @@ void ImageHandler::nextIteration()
 
 void ImageHandler::useAlgorithmFor(QVector<QVector<int>> &newDataMatrix, QVector<QVector<char>> &newActiveMatrix)
 {
+    double currentBlackout = 0;
     for (int y = 0; y < newDataMatrix.size(); ++y)
     {
         for (int x = 0; x < newDataMatrix[y].size(); ++x)
@@ -136,7 +140,8 @@ void ImageHandler::useAlgorithmFor(QVector<QVector<int>> &newDataMatrix, QVector
             newActiveMatrix[y][x] = frame[y][x] || newDataMatrix[y][x] < brightnessThreshold;
 
             //Calculation of blackout value
-            blackout.push_back((1 / (sourceImage->width() * sourceImage->height())) * (dataMatrix[y][x] - newDataMatrix[y][x]));
+            currentBlackout += ((1. / (sourceImage->width() * sourceImage->height())) * (dataMatrix[y][x] - newDataMatrix[y][x]));
         }
     }
+    blackout.push_back(currentBlackout);
 }

@@ -25,7 +25,6 @@ private:
     int stressCycles;
 
 signals:
-    void finished();
     void finished(ImageHandler* imageHandler, int numberOfIterations, int stressCycles);
     void gotNewIteration(int current);
 

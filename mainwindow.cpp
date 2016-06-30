@@ -71,12 +71,12 @@ void MainWindow::startInNewThread()
     connect(ihWorker, SIGNAL(gotNewIteration(int)), ui->progressBar, SLOT(setValue(int)));
     //Delete all after finishing
     connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), blChart, SLOT(startShowChart(ImageHandler*, int, int)));
-    connect(ihWorker, SIGNAL(finished()), backgroundThread, SLOT(quit()));
-    connect(ihWorker, SIGNAL(finished()), ihWorker, SLOT(deleteLater()));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), backgroundThread, SLOT(quit()));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), ihWorker, SLOT(deleteLater()));
     connect(backgroundThread, SIGNAL(finished()), backgroundThread, SLOT(deleteLater()));
 
     //Enable start button after finishing
-    connect(ihWorker, SIGNAL(finished()), this, SLOT(changeStartButtonState()));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), this, SLOT(changeStartButtonState()));
 
     //Start thread
     backgroundThread->start();

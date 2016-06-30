@@ -22,7 +22,7 @@ void BlackoutChart::createChart(std::vector<double> relativeBlackout, int number
 
     for (int i = 0; i < numberOfCycles; ++i)
     {
-        X[i] = i;
+        X[i] = i + 1;
         Y[i] = relativeBlackout[i];
     }
 

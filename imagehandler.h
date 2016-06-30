@@ -21,7 +21,6 @@ public:
     void setImage(QImage *image);
     QImage* getImage();
 
-    void initVectorsOfBlackout(int numberOfIterations);
     void createVectorOfRelativeBlackout(int numberOfIterations);
     std::vector<double> getVectorOfRelativeBlackout();
 

@@ -22,8 +22,6 @@ void IHWorker::start()
     QImage *sourceImage = new QImage(imagePath);
     imageHandler = new ImageHandler(sourceImage, frameThreshold, brightnessThreshold, stressAmplitude, stressCycles);
 
-    imageHandler->initVectorsOfBlackout(numberOfIterations);
-
     sourceImage->save(destPath + "/" + QString::number(0) + ".bmp");
     //Work
     for (int i = 0; i < numberOfIterations; ++i)
@@ -40,7 +38,6 @@ void IHWorker::start()
 
     imageHandler->createVectorOfRelativeBlackout(numberOfIterations);
 
-    emit finished();
     emit finished(imageHandler, numberOfIterations, stressCycles);
 
     delete sourceImage;
