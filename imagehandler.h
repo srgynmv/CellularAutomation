@@ -21,10 +21,6 @@ public:
     void setImage(QImage *image);
     QImage* getImage();
 
-//    NOT WORKING
-//    struct ThreadTask;
-//    void useAlgorithmForWrapper(ThreadTask task);
-
 private:
     QImage *sourceImage;
     QVector<QVector<int>> dataMatrix;
@@ -35,7 +31,6 @@ private:
     int stressCycles;
 
     void useAlgorithmFor(QVector<QVector<int> > &newDataMatrix, QVector<QVector<char> > &newActiveMatrix);
-//    void useAlgorithmFor(QVector<QVector<int> > *newDataMatrix, QVector<QVector<char> > *newActiveMatrix, QPair<int, int> pairX, QPair<int, int> pairY);
 
 signals:
 
