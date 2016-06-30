@@ -21,12 +21,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->openDestBrowserButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startInNewThread()));
 
-#if true
+#if WIN32
+    qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
+    ui->imagePathLine->setText("C:/Users/MashenkinRoman/Pictures/ZTV/1_1.bmp");
+    ui->destPathLine->setText("C:/Users/MashenkinRoman/Pictures/ZTV1");
+#else
     qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
     ui->imagePathLine->setText("/home/srgynmv/ZTV/1_1.bmp");
     ui->destPathLine->setText("/home/srgynmv/Result");
 #endif
-
 }
 
 void MainWindow::openFileDialog()

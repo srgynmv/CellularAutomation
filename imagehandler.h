@@ -3,11 +3,11 @@
 
 #include <QObject>
 #include <QtWidgets>
-#include <QtConcurrent/QtConcurrent>
 
 class ImageHandler : public QObject
 {
     Q_OBJECT
+
 public:
     const int MAX_GRAY_COLOR = 255;
     const int MIN_GRAY_COLOR = 0;
@@ -21,25 +21,26 @@ public:
     void setImage(QImage *image);
     QImage* getImage();
 
-//    NOT WORKING
-//    struct ThreadTask;
-//    void useAlgorithmForWrapper(ThreadTask task);
+    void initVectorsOfBlackout(int numberOfIterations);
+    void createVectorOfRelativeBlackout(int numberOfIterations);
+    QVector<double> getVectorOfRelativeBlackout();
 
 private:
     QImage *sourceImage;
     QVector<QVector<int>> dataMatrix;
     QVector<QVector<char>> frame, activeMatrix;
+    QVector<double> blackout, relativeBlackout;
     int frameThreshold;
     int brightnessThreshold;
     int stressAmplitude;
     int stressCycles;
 
     void useAlgorithmFor(QVector<QVector<int> > &newDataMatrix, QVector<QVector<char> > &newActiveMatrix);
-//    void useAlgorithmFor(QVector<QVector<int> > *newDataMatrix, QVector<QVector<char> > *newActiveMatrix, QPair<int, int> pairX, QPair<int, int> pairY);
 
 signals:
 
 public slots:
+
 };
 
 #endif // IMAGEHANDLER_H
