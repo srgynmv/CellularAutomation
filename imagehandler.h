@@ -9,6 +9,10 @@ class ImageHandler : public QObject
 {
     Q_OBJECT
 public:
+    enum FrameType {
+        ONE_THRESHOLD, THREE_THRESHOLDS, PART_THRESHOLD
+    };
+
     const int MAX_GRAY_COLOR = 255;
     const int MIN_GRAY_COLOR = 0;
     const QVector<int> plusDx = {-1, 1, 0, 0};
@@ -16,9 +20,9 @@ public:
     const QVector<int> cornersDx = {-1, 1, 1, -1};
     const QVector<int> cornersDy = {-1, 1, -1, 1};
 
-    explicit ImageHandler(QImage *image, int frameThreshold, int brightnessThreshold, int stressAmplitude, int stressCycles, QObject *parent = 0);
+    explicit ImageHandler(int brightnessThreshold, int stressAmplitude, int stressCycles, QObject *parent = 0);
     void nextIteration();
-    void setImage(QImage *image);
+    void setImage(QImage *image, FrameType frameType, QVector<int> frameThresholds, QVector<int> frameValues);
     QImage* getImage();
 
 private:
