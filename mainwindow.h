@@ -25,6 +25,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     IHWorker *ihWorker;
+    BlackoutChart *blChart;
 };
 
 #endif // MAINWINDOW_H

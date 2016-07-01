@@ -21,12 +21,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->openDestBrowserButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startInNewThread()));
 
-#if true
+#if WIN32
+    qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
+    ui->imagePathLine->setText("C:/Users/MashenkinRoman/Pictures/ZTV/1_1.bmp");
+    ui->destPathLine->setText("C:/Users/MashenkinRoman/Pictures/ZTV1");
+#else
     qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
     ui->imagePathLine->setText("/home/srgynmv/ZTV/1_1.bmp");
     ui->destPathLine->setText("/home/srgynmv/Result");
 #endif
-
 }
 
 void MainWindow::openFileDialog()
@@ -48,6 +51,7 @@ void MainWindow::startInNewThread()
 {
     //Initialize new thread and worker
     ihWorker = new IHWorker(ui->imagePathLine->text(), ui->destPathLine->text());
+    blChart = new BlackoutChart();
     QThread *backgroundThread = new QThread();
 
     ihWorker->moveToThread(backgroundThread);
@@ -66,12 +70,13 @@ void MainWindow::startInNewThread()
     //Connect with progress bar
     connect(ihWorker, SIGNAL(gotNewIteration(int)), ui->progressBar, SLOT(setValue(int)));
     //Delete all after finishing
-    connect(ihWorker, SIGNAL(finished()), backgroundThread, SLOT(quit()));
-    connect(ihWorker, SIGNAL(finished()), ihWorker, SLOT(deleteLater()));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), blChart, SLOT(startShowChart(ImageHandler*, int, int)));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), backgroundThread, SLOT(quit()));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), ihWorker, SLOT(deleteLater()));
     connect(backgroundThread, SIGNAL(finished()), backgroundThread, SLOT(deleteLater()));
 
     //Enable start button after finishing
-    connect(ihWorker, SIGNAL(finished()), this, SLOT(changeStartButtonState()));
+    connect(ihWorker, SIGNAL(finished(ImageHandler*, int, int)), this, SLOT(changeStartButtonState()));
 
     //Start thread
     backgroundThread->start();

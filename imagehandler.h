@@ -3,11 +3,11 @@
 
 #include <QObject>
 #include <QtWidgets>
-#include <QtConcurrent/QtConcurrent>
 
 class ImageHandler : public QObject
 {
     Q_OBJECT
+
 public:
     const int MAX_GRAY_COLOR = 255;
     const int MIN_GRAY_COLOR = 0;
@@ -21,10 +21,17 @@ public:
     void setImage(QImage *image);
     QImage* getImage();
 
+<<<<<<< HEAD
+=======
+    void createVectorOfRelativeBlackout(int numberOfIterations);
+    std::vector<double> getVectorOfRelativeBlackout();
+
+>>>>>>> dev-branch
 private:
     QImage *sourceImage;
     QVector<QVector<int>> dataMatrix;
     QVector<QVector<char>> frame, activeMatrix;
+    std::vector<double> blackout, relativeBlackout;
     int frameThreshold;
     int brightnessThreshold;
     int stressAmplitude;
@@ -35,6 +42,7 @@ private:
 signals:
 
 public slots:
+
 };
 
 #endif // IMAGEHANDLER_H

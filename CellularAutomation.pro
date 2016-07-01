@@ -4,8 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += concurrent
+QT       += core gui\
+            printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,10 +16,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     imagehandler.cpp \
-    ihworker.cpp
+    ihworker.cpp \
+    blackoutchart.cpp \
+    qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     imagehandler.h \
-    ihworker.h
+    ihworker.h \
+    blackoutchart.h \
+    qcustomplot.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    blackoutchart.ui
