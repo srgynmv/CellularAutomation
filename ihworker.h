@@ -12,14 +12,19 @@ class IHWorker : public QObject
 
 public:
     explicit IHWorker(QString imagePath, QString destPath, QObject *parent = 0);
-    void setParameters(int numberOfIterations, int frameThreshold, int brightnessThreshold, int stressAmplitude, int stressCycles);
 
+    void setModelParameters(int numberOfIterations, int brightnessThreshold, int stressAmplitude, int stressCycles);
+    void setFrameParameters(ImageHandler::FrameType type, QVector<int> frameThresholds, QVector<int> frameValues);
 private:
     ImageHandler *imageHandler;
     QString imagePath;
     QString destPath;
+
+    ImageHandler::FrameType frameType;
+    QVector<int> frameThresholds;
+    QVector<int> frameValues;
+
     int numberOfIterations;
-    int frameThreshold;
     int brightnessThreshold;
     int stressAmplitude;
     int stressCycles;

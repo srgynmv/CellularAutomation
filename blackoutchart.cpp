@@ -8,6 +8,7 @@ BlackoutChart::BlackoutChart(QWidget *parent) :
     ui(new Ui::BlackoutChart)
 {
     ui->setupUi(this);
+    setWindowTitle("Blackout Chart");
 }
 
 BlackoutChart::~BlackoutChart()

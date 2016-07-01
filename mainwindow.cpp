@@ -20,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->openImageBrowserButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(ui->openDestBrowserButton, SIGNAL(clicked()), this, SLOT(openFileDialog()));
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(startInNewThread()));
+    connect(ui->threeThresholds, SIGNAL(toggled(bool)), ui->frameThreshold2SpinBox, SLOT(setEnabled(bool)));
+    connect(ui->threeThresholds, SIGNAL(toggled(bool)), ui->frameThreshold3SpinBox, SLOT(setEnabled(bool)));
+    connect(ui->threeThresholds, SIGNAL(toggled(bool)), ui->frameValue2SpinBox, SLOT(setEnabled(bool)));
+    connect(ui->threeThresholds, SIGNAL(toggled(bool)), ui->frameValue3SpinBox, SLOT(setEnabled(bool)));
 
 #if WIN32
     qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
@@ -29,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug("Number of CPU cores: %d", QThread::idealThreadCount());
     ui->imagePathLine->setText("/home/srgynmv/ZTV/1_1.bmp");
     ui->destPathLine->setText("/home/srgynmv/Result");
+    ui->oneThreshold->click();
 #endif
 }
 
@@ -55,7 +60,17 @@ void MainWindow::startInNewThread()
     QThread *backgroundThread = new QThread();
 
     ihWorker->moveToThread(backgroundThread);
-    ihWorker->setParameters(ui->iterationNumberSpinBox->value(), ui->frameThresholdSpinBox->value(), ui->brightThresholdSpinBox-> value(), ui->stressAmplitudeSpinBox->value(), ui->stressCyclesSpinBox->value());
+
+    //Getting frame parameters from ui
+    ImageHandler::FrameType frameType;
+    if (ui->oneThreshold->isChecked()) frameType = ImageHandler::ONE_THRESHOLD;
+    else if (ui->threeThresholds->isChecked()) frameType = ImageHandler::THREE_THRESHOLDS;
+    else frameType = ImageHandler::PART_THRESHOLD;
+    QVector<int> frameThresholds = {ui->frameThreshold1SpinBox->value(), ui->frameThreshold2SpinBox->value(), ui->frameThreshold3SpinBox->value()};
+    QVector<int> frameValues = {ui->frameValue1SpinBox->value(), ui->frameValue2SpinBox->value(), ui->frameValue3SpinBox->value()};
+
+    ihWorker->setModelParameters(ui->iterationNumberSpinBox->value(), ui->brightThresholdSpinBox->value(), ui->stressAmplitudeSpinBox->value(), ui->stressCyclesSpinBox->value());
+    ihWorker->setFrameParameters(frameType, frameThresholds, frameValues);
 
     //Setup progress bar values
     ui->progressBar->setMaximum(ui->iterationNumberSpinBox->value());

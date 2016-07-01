@@ -1,30 +1,29 @@
-#include "imagehandler.h"
+﻿#include "imagehandler.h"
 #include <QtDebug>
 
-ImageHandler::ImageHandler(QImage *image, int frameThreshold, int brightnessThreshold, int stressAmplitude, int stressCycles, QObject *parent) : QObject(parent)
+ImageHandler::ImageHandler(int brightnessThreshold, int stressAmplitude, int stressCycles, QObject *parent) : QObject(parent)
 {
-    this->frameThreshold = frameThreshold;
     this->brightnessThreshold = brightnessThreshold;
     this->stressAmplitude = stressAmplitude;
     this->stressCycles = stressCycles;
 
     blackout = std::vector<double>();
     relativeBlackout = std::vector<double>();
-
-    setImage(image);
 }
 
-void ImageHandler::setImage(QImage *image)
+void ImageHandler::setImage(QImage *image, FrameType frameType, QVector<int> frameThresholds, QVector<int> frameValues)
 {
 #ifdef QT_DEBUG
     qDebug("Number of colors: %d", image->colorCount());
+    qDebug() << "Frame values: " << frameValues[0] << " " << frameValues[1] << " " << frameValues[2];
+    qDebug() << "Frame type: " << frameType;
 #endif
     this->sourceImage = image;
 
     //dataMatrix[y][x] is grayscale of pixel on (x, y)
     //Making a datamatrix and frame
     dataMatrix = QVector<QVector<int>>(image->height(), QVector<int>(image->width()));
-    frame = QVector<QVector<char>>(image->height(), QVector<char>(image->width()));
+    frame = QVector<QVector<char>>(image->height(), QVector<char>(image->width(), false));
     activeMatrix = QVector<QVector<char>>(image->height(), QVector<char>(image->width()));
 
     for (int y = 0; y < dataMatrix.size(); ++y)
@@ -32,17 +31,40 @@ void ImageHandler::setImage(QImage *image)
         for (int x = 0; x < dataMatrix[y].size(); ++x)
         {
             int grayPixel = qGray(sourceImage->pixel(x, y));
-            if (grayPixel > frameThreshold)
+
+            switch (frameType)
+            {
+            case ONE_THRESHOLD:
+                if (grayPixel <= frameThresholds[0])
+                {
+                    dataMatrix[y][x] = frameValues[0];
+                    frame[y][x] = true;
+                }
+                break;
+            case THREE_THRESHOLDS:
+                for (int i = 0; i < frameThresholds.size(); ++i)
+                {
+                    if (grayPixel <= frameThresholds[i])
+                    {
+                        dataMatrix[y][x] = frameValues[i];
+                        frame[y][x] = true;
+                        break;
+                    }
+                }
+                break;
+            case PART_THRESHOLD:
+                if (grayPixel <= frameThresholds[0])
+                {
+                    dataMatrix[y][x] = qMin(grayPixel * frameValues[0], MAX_GRAY_COLOR);
+                    frame[y][x] = true;
+                }
+                break;
+            };
+
+            if (!frame[y][x])
             {
                 dataMatrix[y][x] = MAX_GRAY_COLOR;
-                frame[y][x] = false;
             }
-            else
-            {
-                dataMatrix[y][x] = MIN_GRAY_COLOR;
-                frame[y][x] = true;
-            }
-
             activeMatrix[y][x] = frame[y][x] || dataMatrix[y][x] < brightnessThreshold;
         }
     }
@@ -134,6 +156,10 @@ void ImageHandler::useAlgorithmFor(QVector<QVector<int>> &newDataMatrix, QVector
                 }
 
                 newDataMatrix[y][x] = qMax(dataMatrix[y][x] - activePixelCount, MIN_GRAY_COLOR);
+            }
+            else
+            {
+                newDataMatrix[y][x] = dataMatrix[y][x];
             }
 
             //Set true if pixel become active:
